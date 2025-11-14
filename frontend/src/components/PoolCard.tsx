@@ -13,7 +13,7 @@ interface PoolCardProps {
     name: string;
     icon: 'nova' | 'pulse' | 'flux';
   }[];
-  onPlaceBet: (poolId: string) => void;
+  onPlaceBet: (poolId: string, choice: { name: string; icon: 'nova' | 'pulse' | 'flux' }) => void;
 }
 
 const PoolCard = ({ id, name, totalPool, participants, endTime, choices, onPlaceBet }: PoolCardProps) => {
@@ -60,16 +60,20 @@ const PoolCard = ({ id, name, totalPool, participants, endTime, choices, onPlace
         {choices.map((choice) => (
           <button
             key={choice.id}
+            onClick={() => onPlaceBet(id, { name: choice.name, icon: choice.icon })}
             className={`
               relative flex flex-col items-center justify-center
-              aspect-square rounded-2xl border-2 
-              transition-all duration-300 hover:scale-105
+              aspect-square rounded-2xl border-2
+              transition-all duration-300 hover:scale-105 cursor-pointer
               ${getChoiceStyles(choice.icon)}
             `}
           >
             <span className="text-4xl mb-2">{getChoiceEmoji(choice.icon)}</span>
             <span className="text-sm font-rajdhani font-bold tracking-wider">
               {choice.name}
+            </span>
+            <span className="absolute top-2 right-2 text-xs font-poppins bg-background/80 px-2 py-1 rounded">
+              Click to bet
             </span>
           </button>
         ))}
@@ -105,13 +109,12 @@ const PoolCard = ({ id, name, totalPool, participants, endTime, choices, onPlace
         <span className="font-rajdhani font-bold text-accent text-lg">{endTime}</span>
       </div>
 
-      {/* Place Bet Button */}
-      <Button
-        onClick={() => onPlaceBet(id)}
-        className="w-full bg-gradient-to-r from-primary to-primary-glow hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] font-orbitron font-bold text-lg py-6 rounded-xl transition-all duration-300 hover:scale-[1.02]"
-      >
-        PLACE BET
-      </Button>
+      {/* Info Text */}
+      <div className="text-center">
+        <p className="text-sm text-muted-foreground font-poppins">
+          👆 Click any choice above to place your bet
+        </p>
+      </div>
     </Card>
   );
 };

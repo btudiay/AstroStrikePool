@@ -8,6 +8,7 @@ import { useAllPools, usePoolData } from '@/hooks/usePoolData';
 
 const Index = () => {
   const [selectedPool, setSelectedPool] = useState<string | null>(null);
+  const [selectedChoice, setSelectedChoice] = useState<{ name: string; icon: 'nova' | 'pulse' | 'flux' } | null>(null);
   const [betSheetOpen, setBetSheetOpen] = useState(false);
 
   // Get all pool IDs from contract
@@ -34,8 +35,9 @@ const Index = () => {
 
   console.log('Pools data:', { pools, loadingPools });
 
-  const handlePlaceBet = (poolId: string) => {
+  const handlePlaceBet = (poolId: string, choice: { name: string; icon: 'nova' | 'pulse' | 'flux' }) => {
     setSelectedPool(poolId);
+    setSelectedChoice(choice);
     setBetSheetOpen(true);
   };
 
@@ -166,7 +168,7 @@ const Index = () => {
         poolId={selectedPoolData?.id || ''}
         poolName={selectedPoolData?.name || ''}
         entryFee={selectedPoolData?.entryFee || '0'}
-        selectedChoice={selectedPoolData?.choices[0] || null}
+        selectedChoice={selectedChoice}
       />
     </div>
   );
